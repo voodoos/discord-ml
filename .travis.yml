@@ -7,6 +7,7 @@ script: bash ./.travis-docker.sh
 env:
   global:
   - PACKAGE=discord-ml
+  - DISTRO=debian-stable
   - OCAML_VERSION=4.09
 deploy:
   provider: pages:git
