@@ -1,1 +1,1 @@
-web: ./_build/install/default/bin/bot
+web: ./bin/bot.exe
