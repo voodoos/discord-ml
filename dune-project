@@ -17,7 +17,6 @@
   (cohttp (>= 2.5.1))
   (cohttp-lwt-unix (>= 2.5.1))
   (websocket (>= 2.14))
-  (websocket-lwt (>= 2.12))
   (websocket-lwt-unix (>= 2.14))
   (logs (>= 0.7.0))
   (yojson (>= 1.7.0))
