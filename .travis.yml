@@ -1,0 +1,17 @@
+language: c
+sudo: true
+dist: xenial
+install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-opam.sh
+script: |
+  bash -ex .travis-opam.sh
+env:
+  global:
+  - OCAML_VERSION=4.09.0
+os:
+  - linux
+deploy:
+  provider: pages:git
+  keep_history: false
+  local_dir: _build/install/default/bin/
+  token: $GITHUB_TOKEN
+  edge: true # opt in to dpl v2
