@@ -1,0 +1,3 @@
+(library
+ (name discord)
+ (libraries logs logs.fmt))

@@ -1,0 +1,6 @@
+(library
+ (name gateway)
+ (preprocess
+  (pps ppx_deriving_yojson))
+ (libraries discord model logs.fmt logs.lwt websocket websocket-lwt-unix
+   websocket-lwt-unix.cohttp yojson ppx_deriving_yojson.runtime))
