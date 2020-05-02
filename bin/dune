@@ -1,4 +1,4 @@
 (executable
  (public_name bot)
- (promote (until-clean))
+ (promote)
  (libraries discord http gateway))
