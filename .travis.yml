@@ -11,6 +11,8 @@ env:
 deploy:
   provider: pages:git
   keep_history: false
-  local_dir: $OPAM_SWITCH_PREFIX/.opam-switch/build/discord-ml.\~dev/_build/install/default/bin
+  # local_dir:
+  # $OPAM_SWITCH_PREFIX/.opam-switch/build/discord-ml.\~dev/_build/install/default/bin
+  local_dir: $(opam config var discord-ml:build)/_build/install/default/bin
   token: $GITHUB_TOKEN
   edge: true # opt in to dpl v2

@@ -1,1 +1,1 @@
-web: ./bin/bot.exe
+web: ./bot.exe
