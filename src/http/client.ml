@@ -12,7 +12,7 @@ let headers () =
   Header.add_list (Header.init ())
     [
       ("User-Agent", "DiscordBot (https://github.com/, v0.0.1)");
-      ("Authorization", "Bot " ^ (Option.value ~default:"" !token));
+      ("Authorization", "Bot " ^ Option.value ~default:"" !token);
       ("Content-Type", "application/json");
       ("Connection", "keep-alive");
     ]
