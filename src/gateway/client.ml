@@ -152,5 +152,6 @@ module Make (Handlers : Handlers.S) = struct
     pushf () <?> initialize token
 
   let start token =
+    Http.Client.token := Some token;
     client (Uri.of_string "https://gateway.discord.gg/?v=6&encoding=json") token
 end

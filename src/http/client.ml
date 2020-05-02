@@ -4,14 +4,15 @@ open Cohttp_lwt_unix
 
 type commands = Get of Endpoints.t | Post of Endpoints.t * Yojson.Safe.t
 
+let token = ref None (* TODO improve token handling *)
+
 let url endp = Uri.of_string ("https://discordapp.com/api/v6" ^ endp)
 
-let headers =
+let headers () =
   Header.add_list (Header.init ())
     [
-      ("User-Agent", "DiscordBot (https://github.com/voodoos, v0.0.1)");
-      ( "Authorization",
-        "Bot NzA0MzUyNDYwMDk3MDYwOTcz.XqgFHg.P3yAoOCheLfP-8DGciW8pKSsxho" );
+      ("User-Agent", "DiscordBot (https://github.com/, v0.0.1)");
+      ("Authorization", "Bot " ^ (Option.value ~default:"" !token));
       ("Content-Type", "application/json");
       ("Connection", "keep-alive");
     ]
@@ -25,6 +26,8 @@ let handle_response (resp, body) =
   body
 
 let request command =
+  Logs.debug (fun m -> m "Token: %s" (Option.value ~default:"" !token));
+  let headers = headers () in
   ( match command with
   | Get endp -> Client.get ~headers (url endp)
   | Post (endp, payload) ->
