@@ -26,7 +26,6 @@ let handle_response (resp, body) =
   body
 
 let request command =
-  Logs.debug (fun m -> m "Token: %s" (Option.value ~default:"" !token));
   let headers = headers () in
   ( match command with
   | Get endp -> Client.get ~headers (url endp)
