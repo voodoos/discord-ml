@@ -14,6 +14,7 @@
  (description "TODO long decription")
  (depends
   (lwt (>= 5.3.0))
+  (tls (>= 0.11.1))
   (cohttp (>= 2.5.1))
   (cohttp-lwt-unix (>= 2.5.1))
   (websocket (>= 2.14))
