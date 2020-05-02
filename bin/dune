@@ -1,4 +1,3 @@
 (executable
  (public_name bot)
- (promote)
  (libraries discord http gateway))
