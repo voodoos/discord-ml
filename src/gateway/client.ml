@@ -142,14 +142,6 @@ module Make (Handlers : Handlers.S) = struct
         identify ~state token >>= fun state ->
         Lwt.pick [ beat ~state (); react_forever state ]
     in
-    (* let rec pushf () =
-      Lwt_io.(read_line_opt stdin) >>= function
-      | None ->
-          Logs.debug (fun m -> m "Got EOF. Sending a close frame.");
-          send @@ Frame.close 1000 >>= pushf
-      | Some content -> send @@ Frame.create ~content () >>= pushf
-    in *)
-    (* pushf () <?>  *)
     initialize token
 
   let start token =
