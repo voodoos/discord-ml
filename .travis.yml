@@ -8,11 +8,13 @@ env:
   - PACKAGE=discord-ml
   - DISTRO=debian-stable
   - OCAML_VERSION=4.09
+  - POST_INSTALL_HOOK="cp /home/opam/.opam/4.09/.opam-switch/build/discord-ml.~dev/_build/install/default/bin/bot $TRAVIS_BUILD_DIR/bot.exe"
 deploy:
   provider: pages:git
   keep_history: false
   # local_dir:
   # $OPAM_SWITCH_PREFIX/.opam-switch/build/discord-ml.\~dev/_build/install/default/bin
-  local_dir: $(opam config var discord-ml:build)/_build/install/default/bin
+  # local_dir: $(opam config var discord-ml:build)/_build/install/default/bin
+  local_dir: /home/opam/.opam/4.09/.opam-switch/build/discord-ml.~dev/_build/install/default/bin
   token: $GITHUB_TOKEN
   edge: true # opt in to dpl v2
