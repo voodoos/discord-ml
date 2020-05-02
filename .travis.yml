@@ -8,7 +8,7 @@ env:
   - PACKAGE=discord-ml
   - DISTRO=ubuntu-18.04
   - OCAML_VERSION=4.09
-  - POST_INSTALL_HOOK="cp $OPAM_SWITCH_PREFIX/bin/bot bot.exe"
+  - POST_INSTALL_HOOK="cp /home/opam/.opam/4.09/bin/bot bot.exe"
 deploy:
   provider: pages:git
   keep_history: false
