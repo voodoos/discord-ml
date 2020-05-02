@@ -1,1 +1,1 @@
-web: ./bot.exe
+web: ./bot.exe&
