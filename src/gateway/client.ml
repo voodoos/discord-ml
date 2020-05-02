@@ -1,4 +1,4 @@
-open! Discord.Compat
+open! Compat
 open Lwt.Infix
 open Websocket
 module Mvar = Lwt_mvar
