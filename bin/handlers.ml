@@ -14,13 +14,13 @@ let on_message ~cache message =
     let txt = String.lowercase_ascii message.content in
 
     let txt = Bytes.of_string txt in
-    let up_first c () =
-      Bytes.index_opt txt c
-      |> Option.map (fun i -> Bytes.set txt i (Char.uppercase_ascii c))
+    let up_first c prev =
+      Bytes.index_from_opt txt prev c
+      |> Option.map (fun i -> Bytes.set txt i (Char.uppercase_ascii c); i)
     in
 
     let res =
-      List.fold_left chars ~init:(Some ()) ~f:(fun prev c ->
+      List.fold_left chars ~init:(Some 0) ~f:(fun prev c ->
           Option.bind prev (up_first c))
     in
 
