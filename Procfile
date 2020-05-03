@@ -1,1 +1,1 @@
-web: ./bot.exe > bot.log &
+worker: ./bot.exe
