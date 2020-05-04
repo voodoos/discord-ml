@@ -29,9 +29,10 @@ let on_message ~cache message =
       Model.Actions.Create_message.{ content = Bytes.to_string txt; tts = false }
       in
       Model.Actions.Create_message.run ~payload message.channel_id >>= fun mess ->
-      Lwt_unix.sleep 3. >>= fun () ->
-        (Logs.debug (fun m -> m "Deletiong message %s" (Int64.to_string mess.id));
-        ignore(Model.Actions.Delete_message.run mess.channel_id mess.id));
-      Lwt.return cache
+      let timebomb = Lwt_unix.sleep 5. >>= fun () ->
+        (Logs.debug (fun m -> m "Deleting message %s" (Int64.to_string mess.id));
+        Model.Actions.Delete_message.run mess.channel_id mess.id) >|= fun _ -> cache
+      in
+      Lwt.choose [timebomb; Lwt.return cache]
     else Lwt.return cache
   else Lwt.return cache
