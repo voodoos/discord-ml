@@ -26,3 +26,8 @@ jobs:
       with:
         # Version of the OCaml compiler to initialise
         ocaml-version: 4.09.1
+    - run: opam pin add discord-ml.dev . --no-action
+    - run: opam depext discord-ml --yes #--with-test
+    - run: opam install . --deps-only # --with-doc --with-test
+    - run: opam exec -- dune build
+  #  - run: opam exec -- dune runtest
