@@ -22,7 +22,7 @@ let handle_response (resp, body) =
   Logs.debug (fun m -> m "Response code: %d\n" code);
   Logs.debug (fun m -> m "Headers: %s\n" (resp |> Response.headers |> Header.to_string));
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
-    Logs.debug (fun m -> m "Body of length: %d\n" (String.length body));
+    Logs.debug (fun m -> m "Body of length: %d\n<<<%s>>>\n" (String.length body) body);
   body
 
 let request command =
