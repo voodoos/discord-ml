@@ -2,6 +2,7 @@ module Create_message = struct
   type payload = {
     content : string;
         (* TODO https://discordapp.com/developers/docs/resources/channel#create-message *)
+    tts : bool;
   }
   [@@deriving yojson { strict = false }]
 
