@@ -21,6 +21,13 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+    - name: Cache
+      uses: actions/cache@v1.1.2
+      with:
+        # A directory to store and save the cache
+        path: ~/.opam
+        # An explicit key for restoring and saving the cache
+        key: ${{ runner.os }}-build
     - name: Set up OCaml
       uses: avsm/setup-ocaml@v1.0.1
       with:
