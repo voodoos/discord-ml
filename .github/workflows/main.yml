@@ -39,6 +39,7 @@ jobs:
     - run: opam exec -- dune build
     - run: opam exec -- dune runtest
     - run: mkdir dist && cp _build/default/bin/bot.exe dist/bot.exe
+    - run: cp Procfile dist/Procfile
     - name: Deploy
       if: success()
       uses: crazy-max/ghaction-github-pages@v1
