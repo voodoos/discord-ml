@@ -37,4 +37,13 @@ jobs:
     - run: opam depext discord-ml --yes #--with-test
     - run: opam install . --deps-only # --with-doc --with-test
     - run: opam exec -- dune build
-  #  - run: opam exec -- dune runtest
+    - run: opam exec -- dune runtest
+    - run: mkdir dist && cp _build/default/bin/bot.exe dist/bot.exe
+    - name: Deploy
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v1
+      with:
+        target_branch: gh-pages
+        build_dir: dist
+      env:
+        GITHUB_TOKEN: ${{ secrets.gh_token }}
