@@ -1,3 +1,5 @@
+open Lwt.Infix
+
 module Create_message = struct
   type payload = {
     content : string;
@@ -9,4 +11,12 @@ module Create_message = struct
   let run ~payload channel_id =
     let endp = Http.Endpoints.channel_messages (Snowflake.to_int channel_id) in
     Http.Client.request (Post (endp, payload_to_yojson payload))
+    >|= fun resp -> Yojson.Safe.from_string resp |> Message.of_yojson_exn
+end
+
+module Delete_message = struct
+
+  let run channel_id message_id =
+    let endp = Http.Endpoints.channel_message (Snowflake.to_int channel_id) (Snowflake.to_int message_id) in
+    Http.Client.request (Delete endp)
 end

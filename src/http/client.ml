@@ -2,7 +2,7 @@ open Lwt
 open Cohttp
 open Cohttp_lwt_unix
 
-type commands = Get of Endpoints.t | Post of Endpoints.t * Yojson.Safe.t
+type commands = Get of Endpoints.t | Delete of Endpoints.t | Post of Endpoints.t * Yojson.Safe.t
 
 let token = ref None (* TODO improve token handling *)
 
@@ -29,6 +29,7 @@ let request command =
   let headers = headers () in
   ( match command with
   | Get endp -> Client.get ~headers (url endp)
+  | Delete endp -> Client.delete ~headers (url endp)
   | Post (endp, payload) ->
       let body = `String (Yojson.Safe.to_string payload) in
       Client.post ~headers ~body (url endp) )
