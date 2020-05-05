@@ -1,5 +1,5 @@
 # discord-ml
-Experimental (and incomplete) binders to the Discord API (in a very early state).
+Experimental (and incomplete) bindings to the Discord API (in a very early state).
 
 Inspired by [disml](https://github.com/Mishio595/disml) and reusing parts of it.
 
