@@ -31,6 +31,7 @@ let request command =
   | Get endp -> Client.get ~headers (url endp)
   | Delete endp -> Client.delete ~headers (url endp)
   | Post (endp, payload) ->
+      Logs.debug (fun m -> m "Sending: %s" (Yojson.Safe.to_string payload));
       let body = `String (Yojson.Safe.to_string payload) in
       Client.post ~headers ~body (url endp) )
   >>= handle_response

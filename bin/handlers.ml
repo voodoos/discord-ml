@@ -26,7 +26,7 @@ let on_message ~cache message =
 
     if Option.is_some res then
       let payload =
-      Model.Actions.Create_message.{ content = Bytes.to_string txt; tts = false }
+      Model.Actions.Create_message.{ content = Bytes.to_string txt; nonce = None; tts = false }
       in
       Model.Actions.Create_message.run ~payload message.channel_id >>= fun mess ->
       let timebomb () = Lwt_unix.sleep 5. >>= fun () ->
