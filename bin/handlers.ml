@@ -10,31 +10,14 @@ let sms_send = Free_sms.send ~user:17189984 ~pass:sms_api_pass
 
 let on_message ~cache message =
   let open Model.Message in
-  let re =
-    Re.(
-      whole_string
-        (seq
-           [
-             str "!ping";
-             blank;
-             group
-               (seq
-                  [ str "0"; alt [ str "6"; str "7" ]; repn digit 8 (Some 8) ]);
-           ]))
-  in
-
-  let res = Re.exec_opt (Re.compile re) message.content in
-  let res =
-    Option.bind res (fun g ->
-        if Re.Group.test g 1 then Some (Re.Group.get g 1) else None)
-  in
-
-  Option.iter
-    (fun num ->
-      Logs.debug (fun m -> m "Sending sms to %s" num);
-      let message = Printf.sprintf "send:%s" num in
-      Lwt.async (fun () -> sms_send message >|= ignore))
-    res;
+  (* If message starts with !ping_all ping everyone in notifs channel *)
+  let re = Re.(compile (whole_string (str "!ping_all"))) in
+  if Re.execp re message.content then
+    Lwt.async (fun () ->
+        Free_sms.get_numbers () >>= fun numbers ->
+        let number = String.concat ":" numbers in
+        let message = Printf.sprintf "send:%s" number in
+        sms_send message >|= ignore);
 
   if not (Int64.equal message.author.id cache.user.id) then
     let chars = [ 'p'; 'o'; 'u'; 'e'; 't' ] in

@@ -3,13 +3,15 @@ open Cohttp
 open Cohttp_lwt_unix
 
 type commands =
-  | Get of Endpoints.t
+  | Get of Uri.t
   | Delete of Endpoints.t
   | Post of Endpoints.t * Yojson.Safe.t
 
 let token = ref None (* TODO improve token handling *)
 
-let url endp = Uri.of_string ("https://discordapp.com/api/v6" ^ endp)
+let base = "https://discordapp.com/api/v6"
+
+let url endp = Uri.of_string (base ^ endp)
 
 let headers () =
   Header.add_list (Header.init ())
@@ -33,7 +35,7 @@ let handle_response (resp, body) =
 let request command =
   let headers = headers () in
   ( match command with
-  | Get endp -> Client.get ~headers (url endp)
+  | Get uri -> Client.get ~headers uri
   | Delete endp -> Client.delete ~headers (url endp)
   | Post (endp, payload) ->
       Logs.debug (fun m -> m "Sending: %s" (Yojson.Safe.to_string payload));
@@ -41,4 +43,4 @@ let request command =
       Client.post ~headers ~body (url endp) )
   >>= handle_response
 
-let get_gateway_bot () = request (Get Endpoints.gateway_bot)
+let get_gateway_bot () = request (Get (Uri.of_string Endpoints.gateway_bot))
