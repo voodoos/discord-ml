@@ -10,7 +10,18 @@ let sms_send = Free_sms.send ~user:17189984 ~pass:sms_api_pass
 
 let on_message ~cache message =
   let open Model.Message in
-  let re = Re.(seq [ str "!ping"; blank; group (repn digit 10 (Some 10)) ]) in
+  let re =
+    Re.(
+      whole_string
+        (seq
+           [
+             str "!ping";
+             blank;
+             group
+               (seq
+                  [ str "0"; alt [ str "6"; str "7" ]; repn digit 8 (Some 8) ]);
+           ]))
+  in
 
   let res = Re.exec_opt (Re.compile re) message.content in
   let res =
