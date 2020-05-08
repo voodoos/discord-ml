@@ -2,7 +2,10 @@ open Lwt
 open Cohttp
 open Cohttp_lwt_unix
 
-type commands = Get of Endpoints.t | Delete of Endpoints.t | Post of Endpoints.t * Yojson.Safe.t
+type commands =
+  | Get of Endpoints.t
+  | Delete of Endpoints.t
+  | Post of Endpoints.t * Yojson.Safe.t
 
 let token = ref None (* TODO improve token handling *)
 
@@ -20,9 +23,11 @@ let headers () =
 let handle_response (resp, body) =
   let code = resp |> Response.status |> Code.code_of_status in
   Logs.debug (fun m -> m "Response code: %d\n" code);
-  Logs.debug (fun m -> m "Headers: %s\n" (resp |> Response.headers |> Header.to_string));
+  Logs.debug (fun m ->
+      m "Headers: %s\n" (resp |> Response.headers |> Header.to_string));
   body |> Cohttp_lwt.Body.to_string >|= fun body ->
-    Logs.debug (fun m -> m "Body of length: %d\n<<<%s>>>\n" (String.length body) body);
+  Logs.debug (fun m ->
+      m "Body of length: %d\n<<<%s>>>\n" (String.length body) body);
   body
 
 let request command =
