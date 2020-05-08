@@ -9,10 +9,6 @@ type commands =
 
 let token = ref None (* TODO improve token handling *)
 
-let base = "https://discordapp.com/api/v6"
-
-let url endp = Uri.of_string (base ^ endp)
-
 let headers () =
   Header.add_list (Header.init ())
     [
@@ -36,11 +32,11 @@ let request command =
   let headers = headers () in
   ( match command with
   | Get uri -> Client.get ~headers uri
-  | Delete endp -> Client.delete ~headers (url endp)
+  | Delete endp -> Client.delete ~headers (Endpoints.to_uri endp)
   | Post (endp, payload) ->
       Logs.debug (fun m -> m "Sending: %s" (Yojson.Safe.to_string payload));
       let body = `String (Yojson.Safe.to_string payload) in
-      Client.post ~headers ~body (url endp) )
+      Client.post ~headers ~body (Endpoints.to_uri endp) )
   >>= handle_response
 
 let get_gateway_bot () = request (Get (Uri.of_string Endpoints.gateway_bot))

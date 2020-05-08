@@ -1,4 +1,5 @@
 open Lwt.Infix
+open Model
 
 module Get_channel_messages = struct
   type payload = {
@@ -15,10 +16,10 @@ module Get_channel_messages = struct
       ]
 
   let run ~payload channel_id =
-    let endp = Http.Endpoints.channel_messages (Snowflake.to_int channel_id) in
-    let uri = Uri.(with_query' (Http.Client.url endp) (to_query payload)) in
+    let endp = Endpoints.channel_messages (Snowflake.to_int channel_id) in
+    let uri = Endpoints.to_uri ~query:(to_query payload) endp in
     Logs.debug (fun m -> m "URI = %s" (Uri.to_string uri));
-    Http.Client.request (Get uri) >|= fun resp ->
+    Client.request (Get uri) >|= fun resp ->
     Yojson.Safe.from_string resp |> fun yjson ->
     let l = Yojson.Safe.Util.to_list yjson in
     List.map Message.of_yojson_exn l
@@ -34,18 +35,18 @@ module Create_message = struct
   [@@deriving yojson { strict = false }]
 
   let run ~payload channel_id =
-    let endp = Http.Endpoints.channel_messages (Snowflake.to_int channel_id) in
+    let endp = Endpoints.channel_messages (Snowflake.to_int channel_id) in
     let payload = payload_to_yojson payload in
-    Http.Client.request (Post (endp, payload)) >|= fun resp ->
+    Client.request (Post (endp, payload)) >|= fun resp ->
     Yojson.Safe.from_string resp |> Message.of_yojson_exn
 end
 
 module Delete_message = struct
   let run channel_id message_id =
     let endp =
-      Http.Endpoints.channel_message
+      Endpoints.channel_message
         (Snowflake.to_int channel_id)
         (Snowflake.to_int message_id)
     in
-    Http.Client.request (Delete endp)
+    Client.request (Delete endp)
 end

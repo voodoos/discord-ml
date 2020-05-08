@@ -1,8 +1,9 @@
 open! Compat
-open Lwt.Infix
-open Model.Cache
-include Gateway.Handlers.Default
 module List = ListLabels
+open Discord
+open Model.Cache
+open Lwt.Infix
+include Gateway.Handlers.Default
 
 let sms_api_pass = Sys.getenv "SMS_PASS"
 
@@ -38,15 +39,14 @@ let on_message ~cache message =
 
     if Option.is_some res then (
       let payload =
-        Model.Actions.Create_message.
+        Rest.Create_message.
           { content = Bytes.to_string txt; nonce = None; tts = false }
       in
-      Model.Actions.Create_message.run ~payload message.channel_id
-      >>= fun mess ->
+      Rest.Create_message.run ~payload message.channel_id >>= fun mess ->
       let timebomb () =
         Lwt_unix.sleep 5. >>= fun () ->
         ( Logs.debug (fun m -> m "Deleting message %s" (Int64.to_string mess.id));
-          Model.Actions.Delete_message.run mess.channel_id mess.id )
+          Rest.Delete_message.run mess.channel_id mess.id )
         >|= fun _ -> ()
       in
       Lwt.async timebomb;

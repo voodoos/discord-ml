@@ -1,3 +1,4 @@
+open Discord
 open Lwt.Infix
 
 let send ~user ~pass message =
@@ -16,7 +17,7 @@ let send ~user ~pass message =
 
 let get_numbers () =
   let open Model.Message in
-  let open Model.Actions.Get_channel_messages in
+  let open Rest.Get_channel_messages in
   let payload = { limit = Some 50 } in
   run ~payload (Int64.of_string "708311030677110854") >>= fun messages ->
   let re =

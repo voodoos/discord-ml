@@ -2,6 +2,12 @@ open Printf
 
 type t = string
 
+let base = "https://discordapp.com/api/v6"
+
+let to_uri ?(query = []) t =
+  let uri = Uri.of_string (base ^ t) in
+  Uri.with_query' uri query
+
 let gateway = "/gateway"
 
 let gateway_bot = "/gateway/bot"

@@ -2,6 +2,8 @@ type t = string
 (** Endpoint formatters used internally.
     harvested from @Mishio595 https://github.com/Mishio595/disml *)
 
+val to_uri : ?query:(string * string) list -> t -> Uri.t
+
 val gateway : string
 
 val gateway_bot : string
