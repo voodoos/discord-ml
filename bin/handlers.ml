@@ -12,14 +12,14 @@ let sms_send = Free_sms.send ~user:17189984 ~pass:sms_api_pass
 let on_message ~cache message =
   let open Model.Message in
   (* If message starts with !ping_all ping everyone in notifs channel *)
-  let re = Re.(compile (whole_string (str "!ping_all"))) in
-  if Re.execp re message.content then
+  if message.content = "!ping_all" then
     Lwt.async (fun () ->
         Free_sms.get_numbers () >>= fun numbers ->
         let number = String.concat ":" numbers in
         let message = Printf.sprintf "send:%s" number in
         sms_send message >|= ignore);
 
+  (* If not a message from the bot itself, capitalize pouet letters in messages *)
   if not (Int64.equal message.author.id cache.user.id) then
     let chars = [ 'p'; 'o'; 'u'; 'e'; 't' ] in
     let txt = String.lowercase_ascii message.content in
