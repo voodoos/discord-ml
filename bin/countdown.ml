@@ -18,7 +18,7 @@ let rec next channel message minutes =
     let payload =
     Rest.Edit_message.
       { content = make_text minutes; nonce = None; tts = false } in
-    Lwt_unix.sleep ((float_of_int minutes) *. 60.)
+    Lwt_unix.sleep 60.
       >>= fun () ->
         Rest.Edit_message.run ~payload channel message
       >>= fun _ -> next channel message minutes
