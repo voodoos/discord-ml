@@ -9,7 +9,11 @@ let re =
 
 let make_text minutes =
   if minutes > 0 then
-    List.init minutes (fun _ -> ":banana:") |> String.concat " "
+    List.init (minutes + 1) (fun i ->
+      if i = 0 then ":monkey:"
+      else ":banana:")
+    |> List.rev
+    |> String.concat " "
   else "@everyone :alarm_clock: DRRRING"
 
 let rec next channel message minutes =
