@@ -8,9 +8,9 @@ let re =
         (seq [ str "!bananarebours"; rep1 blank; group ( rep1 digit ) ])))
 
 let make_text minutes =
-  if minutes > 1 then
+  if minutes > 0 then
     List.init minutes (fun _ -> ":banana:") |> String.concat " "
-  else "@everyone DRRRING"
+  else "@everyone :alarm_clock: DRRRING"
 
 let rec next channel message minutes =
   if minutes > 0 then
