@@ -5,9 +5,7 @@ open Model.Cache
 open Lwt.Infix
 include Gateway.Handlers.Default
 
-let sms_api_pass = Sys.getenv "SMS_PASS"
-
-let sms_send = Free_sms.send ~user:17189984 ~pass:sms_api_pass
+let sms_send = Free_sms.send ~user:17189984 ~pass:Free_sms.pass
 
 let on_message ~cache message =
   let open Model.Message in
@@ -18,6 +16,9 @@ let on_message ~cache message =
         let number = String.concat ":" numbers in
         let message = Printf.sprintf "send:%s" number in
         sms_send message >|= ignore);
+
+  (* If message starts with !ping_all ping everyone in notifs channel *)
+  Countdown.check ~cache message;
 
   (* If not a message from the bot itself, capitalize pouet letters in messages *)
   if not (Int64.equal message.author.id cache.user.id) then

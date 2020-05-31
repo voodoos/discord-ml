@@ -6,6 +6,7 @@ type commands =
   | Get of Uri.t
   | Delete of Endpoints.t
   | Post of Endpoints.t * Yojson.Safe.t
+  | Patch of Endpoints.t * Yojson.Safe.t
 
 let token = ref None (* TODO improve token handling *)
 
@@ -36,7 +37,11 @@ let request command =
   | Post (endp, payload) ->
       Logs.debug (fun m -> m "Sending: %s" (Yojson.Safe.to_string payload));
       let body = `String (Yojson.Safe.to_string payload) in
-      Client.post ~headers ~body (Endpoints.to_uri endp) )
+      Client.post ~headers ~body (Endpoints.to_uri endp)
+  | Patch (endp, payload) ->
+    Logs.debug (fun m -> m "Sending: %s" (Yojson.Safe.to_string payload));
+    let body = `String (Yojson.Safe.to_string payload) in
+    Client.patch ~headers ~body (Endpoints.to_uri endp) )
   >>= handle_response
 
 let get_gateway_bot () = request (Get (Uri.of_string Endpoints.gateway_bot))

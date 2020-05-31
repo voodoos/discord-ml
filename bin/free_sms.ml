@@ -1,6 +1,12 @@
 open Discord
 open Lwt.Infix
 
+exception SMS_pass_not_found
+
+let pass = try
+  Sys.getenv "SMS_PASS"
+with Not_found -> raise SMS_pass_not_found
+
 let send ~user ~pass message =
   let endpoint =
     String.concat ""

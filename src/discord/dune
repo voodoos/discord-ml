@@ -1,4 +1,3 @@
 (library
  (name discord)
- (modules_without_implementation config)
  (libraries gateway http compat logs logs.fmt))
