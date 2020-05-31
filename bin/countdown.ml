@@ -10,7 +10,7 @@ let re =
 let make_text minutes =
   if minutes > 1 then
     List.init minutes (fun _ -> ":banana:") |> String.concat " "
-  else "DRRRING"
+  else "@everyone DRRRING"
 
 let rec next channel message minutes =
   if minutes > 0 then
