@@ -58,7 +58,7 @@ module Edit_message = struct
     in
     let payload = payload_to_yojson payload in
     Client.request (Patch (endp, payload)) >|= fun resp ->
-      Yojson.Safe.from_string resp |> Message.of_yojson_exn
+    Yojson.Safe.from_string resp |> Message.of_yojson_exn
 end
 
 module Delete_message = struct
