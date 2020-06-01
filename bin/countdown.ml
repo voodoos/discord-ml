@@ -10,7 +10,7 @@ let re =
 let make_text ~half minutes =
   List.init (minutes + 1) (fun i ->
       if i = 0 then ":monkey:"
-      else if i = 1 && half then "<:half_banana:716964874403708968>"
+      else if i = 1 && half then "<:half_banana:716969720930369546>"
       else ":banana:")
   |> List.rev |> String.concat " "
 
