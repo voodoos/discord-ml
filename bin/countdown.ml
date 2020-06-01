@@ -8,21 +8,30 @@ let re =
          (seq [ str "!bananarebours"; rep1 blank; group (rep1 digit) ])))
 
 let make_text minutes =
+  List.init (minutes + 1) (fun i -> if i = 0 then ":monkey:" else ":banana:")
+  |> List.rev |> String.concat " "
+
+let final_text = "@everyone :alarm_clock: DRRRING :monkey_face: "
+
+let make_payload minutes =
   if minutes > 0 then
-    List.init (minutes + 1) (fun i -> if i = 0 then ":monkey:" else ":banana:")
-    |> List.rev |> String.concat " "
-  else "@everyone :alarm_clock: DRRRING"
+    `Edit
+      Rest.Edit_message.
+        { content = make_text minutes; nonce = None; tts = false }
+  else
+    `Replace
+      Rest.Create_message.{ content = final_text; nonce = None; tts = false }
 
 let rec next channel message minutes =
   if minutes > 0 then
     let minutes = minutes - 1 in
-    let payload =
-      Rest.Edit_message.
-        { content = make_text minutes; nonce = None; tts = false }
-    in
     Lwt_unix.sleep 60. >>= fun () ->
-    Rest.Edit_message.run ~payload channel message >>= fun _ ->
-    next channel message minutes
+    ( match make_payload minutes with
+    | `Edit payload -> Rest.Edit_message.run ~payload channel message
+    | `Replace payload ->
+        Rest.Delete_message.run channel message >|= ignore >>= fun () ->
+        Rest.Create_message.run ~payload channel )
+    >>= fun _ -> next channel message minutes
   else Lwt.return_unit
 
 let start channel minutes =
